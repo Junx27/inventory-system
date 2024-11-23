@@ -219,7 +219,7 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ## 1.3. Get Products By ID
 
-Untuk mendapatkan data semua produk dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
+Untuk mendapatkan data produk berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
 
 ```bash
 http://localhost:8080/api/v1/products/1
@@ -427,3 +427,216 @@ Maka data yang ditampilkan adalah sebagai berikut:
 ```bash
 http://localhost:8080/api/v1/products/1/download-image
 ```
+
+## 2. Inventories
+
+## 2.1. Add Inventories
+
+Untuk menambahkan data inventories dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `POST`:
+
+```bash
+http://localhost:8080/api/v1/inventories
+```
+
+Contoh data `json` yang dimasukan:
+
+```json
+{
+  "location": "Warehose B",
+  "product_id": 1,
+  "qty": 100
+}
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "inventory": {
+    "id": 5,
+    "product_id": 1,
+    "qty": 100,
+    "location": "Warehose B",
+    "product": {
+      "id": 0,
+      "name": "",
+      "price": 0,
+      "category": "",
+      "description": "",
+      "image": ""
+    }
+  },
+  "message": "Inventory created successfully"
+}
+```
+
+## 2.2. Get All Inventories
+
+Untuk mendapatkan data semua inventories dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
+
+```bash
+http://localhost:8080/api/v1/inventories
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "inventories": [
+    {
+      "id": 2,
+      "qty": 30,
+      "location": "Warehouse B"
+    },
+    {
+      "id": 3,
+      "qty": 100,
+      "location": "Warehouse C"
+    },
+    {
+      "id": 4,
+      "qty": 20,
+      "location": "Warehouse D"
+    }
+  ],
+  "message": "Inventories fetched successfully"
+}
+```
+
+## 2.3. Get Inventories By ID
+
+Untuk mendapatkan data inventories berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
+
+```bash
+http://localhost:8080/api/v1/inventories/1
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "inventory": {
+    "id": 1,
+    "location": "Warehouse A",
+    "product": {
+      "id": 1,
+      "name": "Product A",
+      "price": 100,
+      "category": "Category A",
+      "description": "Description for Product A",
+      "image": ""
+    },
+    "product_id": 1,
+    "qty": 50
+  },
+  "message": "Inventory fetched successfully"
+}
+```
+
+## 2.4. Update Inventories By ID
+
+Untuk mengupdate inventories berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `PUT`:
+
+```bash
+http://localhost:8080/api/v1/inventories/1
+```
+
+Contoh data `json` yang dimasukan:
+
+```json
+{
+  "location": "Warehose B Update",
+  "product_id": 1,
+  "qty": 100
+}
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "inventory": {
+    "id": 5,
+    "product_id": 1,
+    "qty": 100,
+    "location": "Warehose B Update",
+    "product": {
+      "id": 0,
+      "name": "",
+      "price": 0,
+      "category": "",
+      "description": "",
+      "image": ""
+    }
+  },
+  "message": "Inventory updated successfully"
+}
+```
+
+## 2.5. Delete Inventories By ID
+
+Untuk menghapus inventories berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `DELETE`:
+
+```bash
+http://localhost:8080/api/v1/inventories/1
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "message": "Inventory deleted successfully"
+}
+```
+
+## 2. Orders
+
+## 2.1. Add Orders
+
+Untuk menambahkan data orders dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `POST`:
+
+```bash
+http://localhost:8080/api/v1/orders
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+## 2.2. Get All Orders
+
+Untuk mendapatkan data semua orders dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
+
+```bash
+http://localhost:8080/api/v1/orders
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+## 2.3. Get Orders By ID
+
+Untuk mendapatkan data orders berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
+
+```bash
+http://localhost:8080/api/v1/orders/1
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+## 2.4. Update Orders By ID
+
+Untuk mengupdate orders berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `PUT`:
+
+```bash
+http://localhost:8080/api/v1/orders/1
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+## 2.5. Delete Orders By ID
+
+Untuk menghapus orders berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `DELETE`:
+
+```bash
+http://localhost:8080/api/v1/orders/1
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
