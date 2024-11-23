@@ -1,16 +1,18 @@
 package model
 
 type Order struct {
-	ID        int             `json:"id" gorm:"primaryKey"`
-	ProductID int             `json:"product_id"` // Tipe data sesuai dengan ProductID di Product
-	Quantity  int             `json:"qty"`
-	Product   ProductResponse `json:"products" gorm:"foreignKey:ProductID;constraint:OnDelete:CASCADE"` // Pastikan foreignKey sesuai
+	ID        int                      `json:"id" gorm:"primaryKey"`
+	ProductID int                      `json:"product_id"`
+	Quantity  int                      `json:"qty"`
+	DateOrder string                   `json:"date_order"`
+	Product   ProductResponseRelations `json:"products" gorm:"foreignKey:ProductID;constraint:OnDelete:CASCADE"`
 }
 
 type OrderResponse struct {
-	ID        int `json:"id" gorm:"primaryKey"`
-	ProductID int `json:"-"` // Tipe data sesuai dengan ProductID di Product
-	Quantity  int `json:"qty"`
+	ID        int    `json:"id" gorm:"primaryKey"`
+	ProductID int    `json:"product_id"`
+	Quantity  int    `json:"qty"`
+	DateOrder string `json:"date_order"`
 }
 
 func (OrderResponse) TableName() string {

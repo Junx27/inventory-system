@@ -1,6 +1,7 @@
 package inventory
 
 import (
+	"inventory-system/helper"
 	"inventory-system/model"
 	"net/http"
 
@@ -12,27 +13,23 @@ func GetInventoryByID(c *gin.Context) {
 	var inventory model.Inventory
 
 	if err := model.DB.Preload("Product").First(&inventory, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Inventory not found"})
+		c.JSON(http.StatusNotFound, helper.FailedResponse("Inventory not found"))
 		return
 	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Inventory fetched successfully",
-		"inventory": gin.H{
-			"id":         inventory.ID,
-			"product_id": inventory.ProductID,
-			"qty":        inventory.Quantity,
-			"location":   inventory.Location,
-			"product":    inventory.Product,
-		},
-	})
+	inventoryResponse := model.InventoryResponse{
+		ID:        inventory.ID,
+		ProductID: inventory.ProductID,
+		Quantity:  inventory.Quantity,
+		Location:  inventory.Location,
+	}
+	c.JSON(http.StatusOK, helper.SuccessResponse("Inventory fetched successfully", inventoryResponse))
 }
 
 func GetInventories(c *gin.Context) {
 	var inventories []model.Inventory
 
 	if err := model.DB.Preload("Product").Find(&inventories).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve inventories"})
+		c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to retrieve inventories"))
 		return
 	}
 
@@ -46,29 +43,29 @@ func GetInventories(c *gin.Context) {
 		})
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message":     "Inventories fetched successfully",
-		"inventories": inventoryResponses,
-	})
+	c.JSON(http.StatusOK, helper.SuccessResponse("Inventories fetched successfully", inventoryResponses))
 }
 
 func AddInventory(c *gin.Context) {
 	var input model.Inventory
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		c.JSON(http.StatusBadRequest, helper.FailedResponse("Invalid input"))
 		return
 	}
 
 	if err := model.DB.Create(&input).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create inventory"})
+		c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to create inventory"))
 		return
 	}
+	inventoryResponse := model.InventoryResponse{
+		ID:        input.ID,
+		ProductID: input.ProductID,
+		Quantity:  input.Quantity,
+		Location:  input.Location,
+	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"message":   "Inventory created successfully",
-		"inventory": input,
-	})
+	c.JSON(http.StatusCreated, helper.SuccessResponse("Inventory created successfully", inventoryResponse))
 }
 
 func UpdateInventory(c *gin.Context) {
@@ -76,13 +73,13 @@ func UpdateInventory(c *gin.Context) {
 	var inventory model.Inventory
 
 	if err := model.DB.First(&inventory, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Inventory not found"})
+		c.JSON(http.StatusNotFound, helper.FailedResponse("Inventory not found"))
 		return
 	}
 
 	var input model.Inventory
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		c.JSON(http.StatusBadRequest, helper.FailedResponse("Invalid input"))
 		return
 	}
 
@@ -91,14 +88,17 @@ func UpdateInventory(c *gin.Context) {
 	inventory.Location = input.Location
 
 	if err := model.DB.Save(&inventory).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update inventory"})
+		c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to update inventory"))
 		return
 	}
+	inventoryResponse := model.InventoryResponse{
+		ID:        input.ID,
+		ProductID: input.ProductID,
+		Quantity:  input.Quantity,
+		Location:  input.Location,
+	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message":   "Inventory updated successfully",
-		"inventory": inventory,
-	})
+	c.JSON(http.StatusOK, helper.SuccessResponse("Inventory updated successfully", inventoryResponse))
 }
 
 func DeleteInventory(c *gin.Context) {
@@ -106,16 +106,14 @@ func DeleteInventory(c *gin.Context) {
 	var inventory model.Inventory
 
 	if err := model.DB.First(&inventory, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Inventory not found"})
+		c.JSON(http.StatusNotFound, helper.FailedResponse("Inventory not found"))
 		return
 	}
 
 	if err := model.DB.Delete(&inventory).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete inventory"})
+		c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to delete inventory"))
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Inventory deleted successfully",
-	})
+	c.JSON(http.StatusOK, helper.SuccessResponse("Inventory deleted successfully", id))
 }

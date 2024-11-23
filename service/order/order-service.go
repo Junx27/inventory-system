@@ -1,6 +1,7 @@
 package order
 
 import (
+	"inventory-system/helper"
 	"inventory-system/model"
 	"net/http"
 
@@ -12,26 +13,25 @@ func GetOrderByID(c *gin.Context) {
 	var order model.Order
 
 	if err := model.DB.Preload("Product").First(&order, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+		c.JSON(http.StatusNotFound, helper.FailedResponse("Order not found"))
 		return
 	}
+	orderResponse := model.OrderResponse{
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Order fetched successfully",
-		"order": gin.H{
-			"id":         order.ID,
-			"product_id": order.ProductID,
-			"qty":        order.Quantity,
-			"product":    order.Product,
-		},
-	})
+		ID:        order.ID,
+		ProductID: order.ProductID,
+		Quantity:  order.Quantity,
+		DateOrder: order.DateOrder,
+	}
+
+	c.JSON(http.StatusOK, helper.SuccessResponse("Order fetched successfully", orderResponse))
 }
 
 func GetOrders(c *gin.Context) {
 	var orders []model.Order
 
 	if err := model.DB.Preload("Product").Find(&orders).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch orders"})
+		c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to fetch orders"))
 		return
 	}
 
@@ -41,36 +41,33 @@ func GetOrders(c *gin.Context) {
 			ID:        order.ID,
 			ProductID: order.ProductID,
 			Quantity:  order.Quantity,
+			DateOrder: order.DateOrder,
 		})
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "All orders fetched successfully",
-		"orders":  orderResponses,
-	})
+	c.JSON(http.StatusOK, helper.SuccessResponse("Order fetched successfully", orderResponses))
 }
 
 func AddOrder(c *gin.Context) {
 	var input model.Order
 
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		c.JSON(http.StatusBadRequest, helper.FailedResponse("Invalid input"))
 		return
 	}
 
 	if err := model.DB.Create(&input).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create order"})
+		c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to create order"))
 		return
 	}
+	newOrder := model.OrderResponse{
+		ID:        input.ID,
+		ProductID: input.ProductID,
+		Quantity:  input.Quantity,
+		DateOrder: input.DateOrder,
+	}
 
-	c.JSON(http.StatusCreated, gin.H{
-		"message": "Order created successfully",
-		"order": gin.H{
-			"id":         input.ID,
-			"product_id": input.ProductID,
-			"qty":        input.Quantity,
-		},
-	})
+	c.JSON(http.StatusCreated, helper.SuccessResponse("Order created successfully", newOrder))
 }
 
 func UpdateOrder(c *gin.Context) {
@@ -78,32 +75,33 @@ func UpdateOrder(c *gin.Context) {
 	var order model.Order
 
 	if err := model.DB.First(&order, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+		c.JSON(http.StatusNotFound, helper.FailedResponse("Order not found"))
 		return
 	}
 
 	var input model.Order
 	if err := c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		c.JSON(http.StatusBadRequest, helper.FailedResponse("Invalid input"))
 		return
 	}
 
 	order.ProductID = input.ProductID
 	order.Quantity = input.Quantity
+	order.DateOrder = input.DateOrder
 
 	if err := model.DB.Save(&order).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update order"})
+		c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to update order"))
 		return
 	}
+	newOrder := model.OrderResponse{
+		ID:        input.ID,
+		ProductID: input.ProductID,
+		Quantity:  input.Quantity,
+		DateOrder: input.DateOrder,
+	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Order updated successfully",
-		"order": gin.H{
-			"id":         order.ID,
-			"product_id": order.ProductID,
-			"qty":        order.Quantity,
-		},
-	})
+	c.JSON(http.StatusCreated, helper.SuccessResponse("Order updated successfully", newOrder))
+
 }
 
 func DeleteOrder(c *gin.Context) {
@@ -111,16 +109,14 @@ func DeleteOrder(c *gin.Context) {
 	var order model.Order
 
 	if err := model.DB.First(&order, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Order not found"})
+		c.JSON(http.StatusNotFound, helper.FailedResponse("Order not found"))
 		return
 	}
 
 	if err := model.DB.Delete(&order).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete order"})
+		c.JSON(http.StatusInternalServerError, helper.FailedResponse("Failed to delete order"))
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "Order deleted successfully",
-	})
+	c.JSON(http.StatusOK, helper.SuccessResponse("Order deleted successfully", id))
 }

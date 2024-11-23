@@ -28,20 +28,20 @@ maka pada terminal akan menampilkan notifikasi sebagai berikut:
  ✔ Container inventory-system-go-drop-1     Started
 ```
 
-## 2. Menjalankan migrasi tabel database dengan menggunakan Docker
-
-Masukan perintah berikut untuk menjalankan migrasi tabel database dengan menggunakan servis sebagai berikut:
-
-```bash
- docker-compose run --rm go-migrate
-```
-
-## 3. Menjalankan drop tabel database dengan menggunakan Docker
+## 2. Menjalankan drop tabel database dengan menggunakan Docker
 
 Masukan perintah drop table untuk menghapus tabel yang sudah ada pada databae, lakukan perintah ini jika perlu dengan menggunakan servis sebagai berikut:
 
 ```bash
 docker-compose run --rm go-drop
+```
+
+## 3. Menjalankan migrasi tabel database dengan menggunakan Docker
+
+Masukan perintah berikut untuk menjalankan migrasi tabel database dengan menggunakan servis sebagai berikut:
+
+```bash
+ docker-compose run --rm go-migrate
 ```
 
 ## 4. Menjalankan migrasi database dengan menggunakan Docker
@@ -98,19 +98,16 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
+  "success": true,
   "message": "Product added successfully",
-  "product": {
-    "id": 5,
+  "data": {
+    "id": 2,
     "name": "New Product 2",
     "price": 100,
     "category": "new",
     "description": "This is a test product",
-    "image": "",
-    "inventory": {
-      "id": 0,
-      "qty": 0,
-      "location": ""
-    },
+    "image": null,
+    "inventory": null,
     "orders": null
   }
 }
@@ -128,88 +125,28 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "products": [
+  "success": true,
+  "message": "Product fetched successfully",
+  "data": [
     {
       "id": 1,
       "name": "Product A",
       "price": 100,
       "category": "Category A",
       "description": "Description for Product A",
-      "image": "image_a.jpg",
-      "inventory": {
-        "id": 1,
-        "qty": 50,
-        "location": "Warehouse A"
-      },
+      "image": "uploads/seeder/1.jpg",
+      "inventory": [
+        {
+          "id": 1,
+          "qty": 50,
+          "location": "Warehouse A"
+        }
+      ],
       "orders": [
         {
           "id": 1,
-          "qty": 5
-        },
-        {
-          "id": 2,
-          "qty": 9
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "name": "Product B",
-      "price": 200,
-      "category": "Category B",
-      "description": "Description for Product B",
-      "image": "image_b.jpg",
-      "inventory": {
-        "id": 2,
-        "qty": 30,
-        "location": "Warehouse B"
-      },
-      "orders": [
-        {
-          "id": 3,
-          "qty": 2
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Product C",
-      "price": 300,
-      "category": "Category C",
-      "description": "Description for Product C",
-      "image": "image_c.jpg",
-      "inventory": {
-        "id": 3,
-        "qty": 100,
-        "location": "Warehouse C"
-      },
-      "orders": [
-        {
-          "id": 4,
-          "qty": 7
-        },
-        {
-          "id": 5,
-          "qty": 20
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "name": "Product D",
-      "price": 150,
-      "category": "Category D",
-      "description": "Description for Product D",
-      "image": "image_d.jpg",
-      "inventory": {
-        "id": 4,
-        "qty": 20,
-        "location": "Warehouse D"
-      },
-      "orders": [
-        {
-          "id": 6,
-          "qty": 1
+          "qty": 5,
+          "date_order": "12 Agustus 2024"
         }
       ]
     }
@@ -229,29 +166,42 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "product": {
-    "id": 1,
-    "name": "Product A",
-    "price": 100,
-    "category": "Category A",
-    "description": "Description for Product A",
-    "image": "image_a.jpg",
-    "inventory": {
+  "success": true,
+  "message": "Products fetched successfully",
+  "data": [
+    {
       "id": 1,
-      "qty": 50,
-      "location": "Warehouse A"
+      "name": "Product A",
+      "price": 100,
+      "category": "Category A",
+      "description": "Description for Product A",
+      "image": null,
+      "inventory": [
+        {
+          "id": 1,
+          "qty": 50,
+          "location": "Warehouse A"
+        }
+      ],
+      "orders": [
+        {
+          "id": 1,
+          "qty": 5,
+          "date_order": "12 Agustus 2024"
+        }
+      ]
     },
-    "orders": [
-      {
-        "id": 1,
-        "qty": 5
-      },
-      {
-        "id": 2,
-        "qty": 9
-      }
-    ]
-  }
+    {
+      "id": 2,
+      "name": "New Product 2",
+      "price": 100,
+      "category": "new",
+      "description": "This is a test product",
+      "image": null,
+      "inventory": [],
+      "orders": []
+    }
+  ]
 }
 ```
 
@@ -260,14 +210,14 @@ Maka data yang ditampilkan adalah sebagai berikut:
 Untuk mengupdate produk berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `PUT`:
 
 ```bash
-http://localhost:8080/api/v1/products/1
+http://localhost:8080/api/v1/products/2
 ```
 
 dan memasukan data `json` sebagai berikut:
 
 ```json
 {
-  "name": "New Product 1",
+  "name": "New Product 2 update",
   "price": 100,
   "category": "new",
   "description": "This is a test product"
@@ -278,114 +228,18 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
+  "success": true,
   "message": "Product updated successfully",
-  "product": {
-    "id": 1,
-    "name": "New Product 1",
+  "data": {
+    "id": 2,
+    "name": "New Product 2 update",
     "price": 100,
     "category": "new",
     "description": "This is a test product",
-    "image": "image_a.jpg",
-    "inventory": {
-      "id": 0,
-      "qty": 0,
-      "location": ""
-    },
+    "image": null,
+    "inventory": null,
     "orders": null
   }
-}
-```
-
-Mengecek perubahan yang telah dibuat dengan mendapatkan semua data produk:
-
-```json
-{
-  "products": [
-    {
-      "id": 2,
-      "name": "Product B",
-      "price": 200,
-      "category": "Category B",
-      "description": "Description for Product B",
-      "image": "image_b.jpg",
-      "inventory": {
-        "id": 2,
-        "qty": 30,
-        "location": "Warehouse B"
-      },
-      "orders": [
-        {
-          "id": 3,
-          "qty": 2
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Product C",
-      "price": 300,
-      "category": "Category C",
-      "description": "Description for Product C",
-      "image": "image_c.jpg",
-      "inventory": {
-        "id": 3,
-        "qty": 100,
-        "location": "Warehouse C"
-      },
-      "orders": [
-        {
-          "id": 4,
-          "qty": 7
-        },
-        {
-          "id": 5,
-          "qty": 20
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "name": "Product D",
-      "price": 150,
-      "category": "Category D",
-      "description": "Description for Product D",
-      "image": "image_d.jpg",
-      "inventory": {
-        "id": 4,
-        "qty": 20,
-        "location": "Warehouse D"
-      },
-      "orders": [
-        {
-          "id": 6,
-          "qty": 1
-        }
-      ]
-    },
-    {
-      "id": 1,
-      "name": "New Product 1",
-      "price": 100,
-      "category": "new",
-      "description": "This is a test product",
-      "image": "image_a.jpg",
-      "inventory": {
-        "id": 1,
-        "qty": 50,
-        "location": "Warehouse A"
-      },
-      "orders": [
-        {
-          "id": 1,
-          "qty": 5
-        },
-        {
-          "id": 2,
-          "qty": 9
-        }
-      ]
-    }
-  ]
 }
 ```
 
@@ -394,14 +248,16 @@ Mengecek perubahan yang telah dibuat dengan mendapatkan semua data produk:
 Untuk menghapus produk berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `DELETE`:
 
 ```bash
-http://localhost:8080/api/v1/products/1
+http://localhost:8080/api/v1/products/2
 ```
 
 Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "message": "Product deleted successfully"
+  "success": true,
+  "message": "Product deleted successfully",
+  "data": "3"
 }
 ```
 
@@ -417,8 +273,9 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "image": "uploads/products/1.jpg",
-  "message": "Image uploaded successfully"
+  "success": true,
+  "message": "Image uploaded successfully",
+  "data": "uploads/products/1.jpg"
 }
 ```
 
@@ -426,6 +283,22 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```bash
 http://localhost:8080/api/v1/products/1/download-image
+```
+
+## 1.8. Delete Image Products By ID
+
+```bash
+http://localhost:8080/api/v1/products/1/delete-image
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "success": true,
+  "message": "Image deleted successfully",
+  "data": "1"
+}
 ```
 
 ## 2. Inventories
@@ -452,21 +325,14 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "inventory": {
-    "id": 5,
+  "success": true,
+  "message": "Inventory created successfully",
+  "data": {
+    "id": 2,
     "product_id": 1,
     "qty": 100,
-    "location": "Warehose B",
-    "product": {
-      "id": 0,
-      "name": "",
-      "price": 0,
-      "category": "",
-      "description": "",
-      "image": ""
-    }
-  },
-  "message": "Inventory created successfully"
+    "location": "Warehose B"
+  }
 }
 ```
 
@@ -482,24 +348,22 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "inventories": [
+  "success": true,
+  "message": "Inventories fetched successfully",
+  "data": [
+    {
+      "id": 1,
+      "product_id": 1,
+      "qty": 50,
+      "location": "Warehouse A"
+    },
     {
       "id": 2,
-      "qty": 30,
-      "location": "Warehouse B"
-    },
-    {
-      "id": 3,
+      "product_id": 1,
       "qty": 100,
-      "location": "Warehouse C"
-    },
-    {
-      "id": 4,
-      "qty": 20,
-      "location": "Warehouse D"
+      "location": "Warehose B"
     }
-  ],
-  "message": "Inventories fetched successfully"
+  ]
 }
 ```
 
@@ -515,21 +379,14 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "inventory": {
+  "success": true,
+  "message": "Inventory fetched successfully",
+  "data": {
     "id": 1,
-    "location": "Warehouse A",
-    "product": {
-      "id": 1,
-      "name": "Product A",
-      "price": 100,
-      "category": "Category A",
-      "description": "Description for Product A",
-      "image": ""
-    },
     "product_id": 1,
-    "qty": 50
-  },
-  "message": "Inventory fetched successfully"
+    "qty": 50,
+    "location": "Warehouse A"
+  }
 }
 ```
 
@@ -538,14 +395,15 @@ Maka data yang ditampilkan adalah sebagai berikut:
 Untuk mengupdate inventories berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `PUT`:
 
 ```bash
-http://localhost:8080/api/v1/inventories/1
+http://localhost:8080/api/v1/inventories/2
 ```
 
 Contoh data `json` yang dimasukan:
 
 ```json
 {
-  "location": "Warehose B Update",
+  "id": 2,
+  "location": "Warehose B update",
   "product_id": 1,
   "qty": 100
 }
@@ -555,21 +413,14 @@ Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "inventory": {
-    "id": 5,
+  "success": true,
+  "message": "Inventory updated successfully",
+  "data": {
+    "id": 2,
     "product_id": 1,
     "qty": 100,
-    "location": "Warehose B Update",
-    "product": {
-      "id": 0,
-      "name": "",
-      "price": 0,
-      "category": "",
-      "description": "",
-      "image": ""
-    }
-  },
-  "message": "Inventory updated successfully"
+    "location": "Warehose B update"
+  }
 }
 ```
 
@@ -578,14 +429,16 @@ Maka data yang ditampilkan adalah sebagai berikut:
 Untuk menghapus inventories berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `DELETE`:
 
 ```bash
-http://localhost:8080/api/v1/inventories/1
+http://localhost:8080/api/v1/inventories/2
 ```
 
 Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
 {
-  "message": "Inventory deleted successfully"
+  "success": true,
+  "message": "Inventory deleted successfully",
+  "data": "2"
 }
 ```
 
@@ -599,7 +452,30 @@ Untuk menambahkan data orders dapat menjalankan perintah sebagai berikut pada PO
 http://localhost:8080/api/v1/orders
 ```
 
+dapat memasukan data `json` sebagai berikut:
+
+```json
+{
+  "product_id": 1,
+  "qty": 10,
+  "date_order": "2024-11-23"
+}
+```
+
 Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "success": true,
+  "message": "Order created successfully",
+  "data": {
+    "id": 2,
+    "product_id": 1,
+    "qty": 10,
+    "date_order": "2024-11-23"
+  }
+}
+```
 
 ## 2.2. Get All Orders
 
@@ -611,6 +487,27 @@ http://localhost:8080/api/v1/orders
 
 Maka data yang ditampilkan adalah sebagai berikut:
 
+```json
+{
+  "success": true,
+  "message": "Order fetched successfully",
+  "data": [
+    {
+      "id": 1,
+      "product_id": 1,
+      "qty": 5,
+      "date_order": "12 Agustus 2024"
+    },
+    {
+      "id": 2,
+      "product_id": 1,
+      "qty": 10,
+      "date_order": "2024-11-23"
+    }
+  ]
+}
+```
+
 ## 2.3. Get Orders By ID
 
 Untuk mendapatkan data orders berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
@@ -621,6 +518,19 @@ http://localhost:8080/api/v1/orders/1
 
 Maka data yang ditampilkan adalah sebagai berikut:
 
+```json
+{
+  "success": true,
+  "message": "Order fetched successfully",
+  "data": {
+    "id": 1,
+    "product_id": 1,
+    "qty": 5,
+    "date_order": "12 Agustus 2024"
+  }
+}
+```
+
 ## 2.4. Update Orders By ID
 
 Untuk mengupdate orders berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `PUT`:
@@ -629,7 +539,31 @@ Untuk mengupdate orders berdasarkan id dapat menjalankan perintah sebagai beriku
 http://localhost:8080/api/v1/orders/1
 ```
 
+dapat memasukan data `json` sebagai berikut:
+
+```json
+{
+  "id": 1,
+  "product_id": 1,
+  "qty": 10,
+  "date_order": "2024-11-23"
+}
+```
+
 Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "success": true,
+  "message": "Order updated successfully",
+  "data": {
+    "id": 1,
+    "product_id": 1,
+    "qty": 10,
+    "date_order": "2024-11-23"
+  }
+}
+```
 
 ## 2.5. Delete Orders By ID
 
@@ -640,3 +574,11 @@ http://localhost:8080/api/v1/orders/1
 ```
 
 Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "success": true,
+  "message": "Order deleted successfully",
+  "data": "1"
+}
+```

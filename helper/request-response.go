@@ -1,4 +1,4 @@
-package model
+package helper
 
 type Request struct {
 	Page     int    `json:"page,omitempty" form:"page"`
@@ -8,19 +8,19 @@ type Request struct {
 
 type Response struct {
 	Success bool        `json:"success"`
-	Data    interface{} `json:"data,omitempty"`
 	Message string      `json:"message,omitempty"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
-func NewSuccessResponse(message string, data any) Response {
+func SuccessResponse(message string, data any) Response {
 	return Response{
 		Success: true,
-		Data:    data,
 		Message: message,
+		Data:    data,
 	}
 }
 
-func NewFailedResponse(message string) Response {
+func FailedResponse(message string) Response {
 	return Response{
 		Message: message,
 	}
