@@ -3,6 +3,7 @@
 Langkah pertama clone repository dengan memasukan perintah sebagai berikut
 
 ```bash
+git clone https://github.com/Junx27/inventory-system
 cd inventory-system
 ```
 
@@ -48,7 +49,7 @@ docker-compose run --rm go-drop
 Masukan perintah berikut untuk melakukan seeder ke dalam database menggunakan data sementara, jika tabel sudah di drop maka lakukan proses migrasi agar proses seeder berhasil dengan menggunakan servis sebagai berikut:
 
 ```bash
-docker-compose run --rm go-seed
+docker-compose run --rm go-seeder
 ```
 
 ## 5. Menghentikan program dengan menggunakan Docker
@@ -70,4 +71,303 @@ maka pada terminal akan menampilkan notifikasi sebagai berikut:
  ✔ Network inventory-system_default         Removed
 ```
 
-## Preview Docker
+## Preview endpoint program
+
+## 1. Products
+
+## 1.1. Add Products
+
+Untuk menambahkan data produk dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `POST`:
+
+```bash
+http://localhost:8080/api/v1/products
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+## 1.2. Get All Products
+
+Untuk mendapatkan data semua produk dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
+
+```bash
+http://localhost:8080/api/v1/products
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Product A",
+      "price": 100,
+      "category": "Category A",
+      "description": "Description for Product A",
+      "image": "image_a.jpg",
+      "inventory": {
+        "id": 1,
+        "qty": 50,
+        "location": "Warehouse A"
+      },
+      "orders": [
+        {
+          "id": 1,
+          "qty": 5
+        },
+        {
+          "id": 2,
+          "qty": 9
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Product B",
+      "price": 200,
+      "category": "Category B",
+      "description": "Description for Product B",
+      "image": "image_b.jpg",
+      "inventory": {
+        "id": 2,
+        "qty": 30,
+        "location": "Warehouse B"
+      },
+      "orders": [
+        {
+          "id": 3,
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Product C",
+      "price": 300,
+      "category": "Category C",
+      "description": "Description for Product C",
+      "image": "image_c.jpg",
+      "inventory": {
+        "id": 3,
+        "qty": 100,
+        "location": "Warehouse C"
+      },
+      "orders": [
+        {
+          "id": 4,
+          "qty": 7
+        },
+        {
+          "id": 5,
+          "qty": 20
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Product D",
+      "price": 150,
+      "category": "Category D",
+      "description": "Description for Product D",
+      "image": "image_d.jpg",
+      "inventory": {
+        "id": 4,
+        "qty": 20,
+        "location": "Warehouse D"
+      },
+      "orders": [
+        {
+          "id": 6,
+          "qty": 1
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 1.3. Get Products By ID
+
+Untuk mendapatkan data semua produk dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `GET`:
+
+```bash
+http://localhost:8080/api/v1/products/1
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "product": {
+    "id": 1,
+    "name": "Product A",
+    "price": 100,
+    "category": "Category A",
+    "description": "Description for Product A",
+    "image": "image_a.jpg",
+    "inventory": {
+      "id": 1,
+      "qty": 50,
+      "location": "Warehouse A"
+    },
+    "orders": [
+      {
+        "id": 1,
+        "qty": 5
+      },
+      {
+        "id": 2,
+        "qty": 9
+      }
+    ]
+  }
+}
+```
+
+## 1.4. Update Products By ID
+
+Untuk mengupdate produk berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `PUT`:
+
+```bash
+http://localhost:8080/api/v1/products/1
+```
+
+dan memasukan data `json` sebagai berikut:
+
+```json
+{
+  "name": "New Product 1",
+  "price": 100,
+  "category": "new",
+  "description": "This is a test product"
+}
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "message": "Product updated successfully",
+  "product": {
+    "id": 1,
+    "name": "New Product 1",
+    "price": 100,
+    "category": "new",
+    "description": "This is a test product",
+    "image": "image_a.jpg",
+    "inventory": {
+      "id": 0,
+      "qty": 0,
+      "location": ""
+    },
+    "orders": null
+  }
+}
+```
+
+Mengecek perubahan yang telah dibuat dengan mendapatkan semua data produk:
+
+```json
+{
+  "products": [
+    {
+      "id": 2,
+      "name": "Product B",
+      "price": 200,
+      "category": "Category B",
+      "description": "Description for Product B",
+      "image": "image_b.jpg",
+      "inventory": {
+        "id": 2,
+        "qty": 30,
+        "location": "Warehouse B"
+      },
+      "orders": [
+        {
+          "id": 3,
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Product C",
+      "price": 300,
+      "category": "Category C",
+      "description": "Description for Product C",
+      "image": "image_c.jpg",
+      "inventory": {
+        "id": 3,
+        "qty": 100,
+        "location": "Warehouse C"
+      },
+      "orders": [
+        {
+          "id": 4,
+          "qty": 7
+        },
+        {
+          "id": 5,
+          "qty": 20
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Product D",
+      "price": 150,
+      "category": "Category D",
+      "description": "Description for Product D",
+      "image": "image_d.jpg",
+      "inventory": {
+        "id": 4,
+        "qty": 20,
+        "location": "Warehouse D"
+      },
+      "orders": [
+        {
+          "id": 6,
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "New Product 1",
+      "price": 100,
+      "category": "new",
+      "description": "This is a test product",
+      "image": "image_a.jpg",
+      "inventory": {
+        "id": 1,
+        "qty": 50,
+        "location": "Warehouse A"
+      },
+      "orders": [
+        {
+          "id": 1,
+          "qty": 5
+        },
+        {
+          "id": 2,
+          "qty": 9
+        }
+      ]
+    }
+  ]
+}
+```
+
+## 1.5. Delete Products By ID
+
+Untuk menghapus produk berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `DELETE`:
+
+```bash
+http://localhost:8080/api/v1/products/1
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+test
+```
