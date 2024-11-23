@@ -83,7 +83,38 @@ Untuk menambahkan data produk dapat menjalankan perintah sebagai berikut pada PO
 http://localhost:8080/api/v1/products
 ```
 
+Contoh memasukan data format `json`:
+
+```json
+{
+  "name": "New Product 2",
+  "price": 100,
+  "category": "new",
+  "description": "This is a test product"
+}
+```
+
 Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "message": "Product added successfully",
+  "product": {
+    "id": 5,
+    "name": "New Product 2",
+    "price": 100,
+    "category": "new",
+    "description": "This is a test product",
+    "image": "",
+    "inventory": {
+      "id": 0,
+      "qty": 0,
+      "location": ""
+    },
+    "orders": null
+  }
+}
+```
 
 ## 1.2. Get All Products
 
@@ -369,5 +400,30 @@ http://localhost:8080/api/v1/products/1
 Maka data yang ditampilkan adalah sebagai berikut:
 
 ```json
-test
+{
+  "message": "Product deleted successfully"
+}
+```
+
+## 1.6 Upload Image Products By ID
+
+Untuk mengupload image produk berdasarkan id dapat menjalankan perintah sebagai berikut pada POSTMAN dengan method `POST`:
+
+```bash
+http://localhost:8080/api/v1/products/1/upload-image
+```
+
+Maka data yang ditampilkan adalah sebagai berikut:
+
+```json
+{
+  "image": "uploads/products/1.jpg",
+  "message": "Image uploaded successfully"
+}
+```
+
+## 1.7. Download Image Products By ID
+
+```bash
+http://localhost:8080/api/v1/products/1/download-image
 ```
